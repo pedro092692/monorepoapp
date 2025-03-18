@@ -1,0 +1,31 @@
+{
+  "name": "5-secrets-app",
+  "version": "1.0.0",
+  "description": "a mono repo app",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install --workspaces",
+    "start:backend": "npm run start --workspace=packages/backend",
+    "start:frontend": "npm run start --workspace=packages/frontend",
+    "build:frontend": "npm run build --workspace=packages/frontend",
+    "build:backend": "npm run build --workspace=packages/backend",
+    "dev:backend": "npm run dev --workspace=packages/backend",
+    "dev:frontend": "npm run dev --workspace=packages/frontend",
+    "dev:all": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "test:backend": "npm run test --workspace=packages/backend",
+    "test:frontend": "npm run test --workspace=packages/frontend",
+    "test:all": "npm run test --workspaces",
+    "lint:backend": "npm run lint --workspace=packages/backend",
+    "lint:frontend": "npm run lint --workspace=packages/frontend",
+    "lint:all": "npm run lint --workspaces"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
