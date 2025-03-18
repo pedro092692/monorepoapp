@@ -19,7 +19,7 @@ class DataBase{
         instance = this;
 
         this.initializeModels();
-        this.syncModels(true);
+        this.syncModels();
     }
 
     async testConnecction(){
@@ -49,7 +49,7 @@ class DataBase{
 
         // sync models
         try{
-            await this.sequelize.sync({ alter: true });
+            await this.sequelize.sync({ force: true });
             console.log('All tables synchronized successfully');
         }catch(error){
             console.error('Error synchronizing tables:', error);

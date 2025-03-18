@@ -15,16 +15,25 @@ function initializeUser(sequelize){
                 type: DataTypes.STRING,
                 allowNull: false,
                 validate:{
-                    notEmpty: true,
-                    isEmail: true,
+                    notEmpty: {
+                        msg: "Email cannot be empty"
+                        },
+                    isEmail:{
+                        msg: "A valid email is required"
+                    },
+                },
+                unique:{
+                    msg: "This email already has been taken"
                 }
             },
             password:{
                 type: DataTypes.STRING,
                 allowNull: false,
                 validate:{
-                    len: 6, 
-                    msg: "password must be at least 6 characters",
+                    len:{
+                        args: [6],
+                        msg: "Password must be at least 6 characters",
+                    }
                 }
             }
         },

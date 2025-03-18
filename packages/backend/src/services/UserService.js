@@ -1,4 +1,6 @@
 import { User } from "../models/UserModel.js";
+import { ValidationError } from "sequelize";
+
 
 class UserService{
     
@@ -23,7 +25,11 @@ class UserService{
 
     #handleServiceError(operation, error){
         console.error( `Error in ${operation}:`, error);
-
+        if(error instanceof ValidationError){
+            const errors = error.errors.map(err => err.message);
+            throw new Error(`Faile ${operation} Errors: ${errors}`);
+        }
+        throw new Error(`Faile ${operation}: ${error}`)
     }
 
 }
