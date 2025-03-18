@@ -1,6 +1,7 @@
 import express from "express";
 import asyncHandler from "express-async-handler";
 import DataBase from "./config/database.js";
+import UserRoutes from "./routes/UserRoutes.js";
 
 class Server{
     constructor(){
@@ -8,7 +9,9 @@ class Server{
         this.port = 4000;
         this.db = new DataBase();
         this.middlewares();
+        this.UserRoutes = UserRoutes;
         this.rotues();
+
     }
 
 
@@ -19,6 +22,10 @@ class Server{
 
     rotues(){
         this.app.get('/', asyncHandler((req, res) => res.send("Hello world")));
+
+        //users routes
+        this.app.use('/users', this.UserRoutes);
+        
     }
 
     errorHandler(){
