@@ -28,7 +28,7 @@ my-monorepo/
 1.  **Clone the repository:**
 
     ```bash
-    git clone [repository_url]
+    git clone https://github.com/pedro092692/monorepoapp.git
     cd my-monorepo
     ```
 
@@ -64,8 +64,8 @@ my-monorepo/
 
 5.  **Access the application:**
 
-    * Backend: `http://localhost:[backend_port]`
-    * Frontend: `http://localhost:[frontend_port]`
+    * Backend: `http://localhost:4000`
+    * Frontend: `http://localhost:3000`
 
 ## Building for Production
 
