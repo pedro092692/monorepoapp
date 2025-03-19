@@ -1,5 +1,5 @@
 import UserService from "../services/UserService.js";
-import { ValidationError } from "sequelize";
+import { ValidationError, ValidationErrorItem } from "sequelize";
 import { NotFoundError } from "../errors/error.js";
 
 
@@ -19,6 +19,13 @@ class UserController{
         const user = await this.users.readUser(id);
         res.status(200).json(user);
     })
+
+    updateUser = this.#wrapServiceCall( async (req, res) => {
+        const { id } = req.params;
+        const updates = req.body;
+        const updateUser = await this.users.updateUser(id, updates);
+        res.status(200).json(updateUser);
+    })
     
 
     #controllerErrorHandler(error, res){
@@ -26,7 +33,7 @@ class UserController{
             return res.status(404).json({error: error.message});
         }
 
-        if( error instanceof ValidationError){
+        if( error instanceof ValidationError || ValidationError){
             return res.status(409).json({error: error.message});
         }
         res.status(500).json({error: error.message});

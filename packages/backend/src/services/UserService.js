@@ -25,6 +25,14 @@ class UserService{
         })
     }
 
+    updateUser(userId, updates){
+        return this.#wrapServiceCall(['Update user'], async () => {
+            const user = await this.readUser(userId);
+            const updatedUser = await user.update(updates);
+            return updatedUser;
+        })
+    }
+
 
     async #wrapServiceCall(kwargs, fn){
         try{
