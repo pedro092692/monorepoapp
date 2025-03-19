@@ -11,7 +11,7 @@ class UserRoutes{
 
     initializeRoutes(){
         this.router.post('/', asyncHandler(this.userController.createUser.bind(this.userController)));
-
+        this.router.get('/:id', asyncHandler(this.userController.selectUser.bind(this.userController)));
 
     }
 

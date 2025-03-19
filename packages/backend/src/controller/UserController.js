@@ -1,6 +1,6 @@
-import { User } from "../models/UserModel.js";
 import UserService from "../services/UserService.js";
 import { ValidationError } from "sequelize";
+import { NotFoundError } from "../errors/error.js";
 
 
 class UserController{
@@ -13,9 +13,19 @@ class UserController{
         const newUser = await this.users.createUser(email, password);
         res.status(201).json(newUser);
     });
+
+    selectUser = this.#wrapServiceCall( async (req, res) => {
+        const { id } = req.params;
+        const user = await this.users.readUser(id);
+        res.status(200).json(user);
+    })
     
 
     #controllerErrorHandler(error, res){
+        if (error instanceof NotFoundError){
+            return res.status(404).json({error: error.message});
+        }
+
         if( error instanceof ValidationError){
             return res.status(409).json({error: error.message});
         }
