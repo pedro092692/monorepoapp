@@ -26,6 +26,12 @@ class UserController{
         const updateUser = await this.users.updateUser(id, updates);
         res.status(200).json(updateUser);
     })
+
+    deleteUser = this.#wrapServiceCall( async (req, res) => {
+        const { id } = req.params;
+        const result = await this.users.deleteUser(id);
+        res.status(200).json({message: "User has been deleted"});
+    })
     
 
     #controllerErrorHandler(error, res){
@@ -33,7 +39,7 @@ class UserController{
             return res.status(404).json({error: error.message});
         }
 
-        if( error instanceof ValidationError || ValidationError){
+        if( error instanceof ValidationError || ValidationErrorItem){
             return res.status(409).json({error: error.message});
         }
         res.status(500).json({error: error.message});

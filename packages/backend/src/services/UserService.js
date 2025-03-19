@@ -26,10 +26,19 @@ class UserService{
     }
 
     updateUser(userId, updates){
-        return this.#wrapServiceCall(['Update user'], async () => {
+        return this.#wrapServiceCall(['Update user', userId], async () => {
             const user = await this.readUser(userId);
             const updatedUser = await user.update(updates);
             return updatedUser;
+        })
+    }
+
+    deleteUser(userId){
+        return this.#wrapServiceCall(['Delete User', userId], async () => {
+            const user = await this.readUser(userId);
+            //delete user 
+            await user.destroy();
+            return 1
         })
     }
 
