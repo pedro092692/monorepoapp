@@ -1,6 +1,7 @@
 import { Sequelize } from "sequelize";
 import path from "path";
-import { initializeUser } from "../models/UserModel.js";
+import { initializeUser, User } from "../models/UserModel.js";
+import { initializeSecret, Secret } from "../models/SecretModel.js";
 
 let instance = null;
 
@@ -19,7 +20,8 @@ class DataBase{
         instance = this;
 
         this.initializeModels();
-        this.syncModels();
+        this.iniciateRelations();
+        this.syncModels(true);
     }
 
     async testConnecction(){
@@ -42,6 +44,12 @@ class DataBase{
 
     initializeModels(){
         initializeUser(this.sequelize);
+        initializeSecret(this.sequelize);
+    }
+
+    iniciateRelations(){
+        User.association({Secret});
+        Secret.assosiation({User});
     }
 
     async syncModels(sync=false){
@@ -49,7 +57,7 @@ class DataBase{
 
         // sync models
         try{
-            await this.sequelize.sync({ force: true });
+            await this.sequelize.sync({ alter: true });
             console.log('All tables synchronized successfully');
         }catch(error){
             console.error('Error synchronizing tables:', error);

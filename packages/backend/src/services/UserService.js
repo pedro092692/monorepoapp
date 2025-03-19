@@ -1,5 +1,5 @@
 import { User } from "../models/UserModel.js";
-import { ValidationError } from "sequelize";
+import { Association, ValidationError } from "sequelize";
 import { NotFoundError } from "../errors/error.js";
 
 
@@ -17,7 +17,7 @@ class UserService{
 
     readUser(userId){
         return this.#wrapServiceCall(['Select User', userId], async () =>{
-            const user = await User.findByPk(userId);
+            const user = await User.findByPk(userId, {include: {association: "secrets"}});
             if(!user){
                 throw new NotFoundError();
             }
@@ -49,6 +49,10 @@ class UserService{
                 order: [
                     ['id', 'ASC']
                 ],
+                include:{
+                    association: "secrets",
+                    attributes:['content']
+                },
                 limit: limit,
                 offset: offset,
             });

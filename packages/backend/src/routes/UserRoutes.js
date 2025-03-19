@@ -1,7 +1,7 @@
 import express from "express";
 import asyncHandler from "express-async-handler";
 import UserController from "../controller/UserController.js";
-import { validateUserFields } from "../validators/UserValidator.js";
+import { validateFields } from "../validators/fieldValidator.js";
 
 class UserRoutes{
     constructor(){
@@ -14,7 +14,7 @@ class UserRoutes{
         this.router.get('/', asyncHandler(this.userController.allUsers.bind(this.userController)));
         this.router.post('/', asyncHandler(this.userController.createUser.bind(this.userController)));
         this.router.get('/:id', asyncHandler(this.userController.selectUser.bind(this.userController)));
-        this.router.patch('/:id', validateUserFields('updateUser'), asyncHandler(this.userController.updateUser.bind(this.userController)));
+        this.router.patch('/:id', validateFields('updateUser'), asyncHandler(this.userController.updateUser.bind(this.userController)));
         this.router.delete('/:id', asyncHandler(this.userController.deleteUser.bind(this.userController)));
     }
 

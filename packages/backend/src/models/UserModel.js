@@ -1,6 +1,15 @@
 import { DataTypes, Model } from "sequelize";
 
-class User extends Model {}
+class User extends Model {
+    //relations 
+    static association(model){
+        this.hasMany(model.Secret, {
+            foreignKey: "userId",
+            as: "secrets",
+        });
+
+    }
+}
 
 function initializeUser(sequelize){
     User.init(
