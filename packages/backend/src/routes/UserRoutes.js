@@ -11,6 +11,7 @@ class UserRoutes{
     }
 
     initializeRoutes(){
+        this.router.get('/', asyncHandler(this.userController.allUsers.bind(this.userController)));
         this.router.post('/', asyncHandler(this.userController.createUser.bind(this.userController)));
         this.router.get('/:id', asyncHandler(this.userController.selectUser.bind(this.userController)));
         this.router.patch('/:id', validateUserFields('updateUser'), asyncHandler(this.userController.updateUser.bind(this.userController)));

@@ -18,20 +18,25 @@ class UserController{
         const { id } = req.params;
         const user = await this.users.readUser(id);
         res.status(200).json(user);
-    })
+    });
 
     updateUser = this.#wrapServiceCall( async (req, res) => {
         const { id } = req.params;
         const updates = req.body;
         const updateUser = await this.users.updateUser(id, updates);
         res.status(200).json(updateUser);
-    })
+    });
 
     deleteUser = this.#wrapServiceCall( async (req, res) => {
         const { id } = req.params;
         const result = await this.users.deleteUser(id);
         res.status(200).json({message: "User has been deleted"});
-    })
+    });
+
+    allUsers = this.#wrapServiceCall( async (req, res ) => {
+        const users = await this.users.users();
+        res.status(200).json(users);
+    });
     
 
     #controllerErrorHandler(error, res){

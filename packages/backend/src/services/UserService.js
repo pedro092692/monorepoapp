@@ -42,6 +42,20 @@ class UserService{
         })
     }
 
+    users(limit=10, offset=0){
+        return this.#wrapServiceCall(['All users'], async () => {
+            const users = await User.findAll({
+                attributes:['id', 'email'],
+                order: [
+                    ['id', 'ASC']
+                ],
+                limit: limit,
+                offset: offset,
+            });
+            return users;
+        })
+    }
+
 
     async #wrapServiceCall(kwargs, fn){
         try{
