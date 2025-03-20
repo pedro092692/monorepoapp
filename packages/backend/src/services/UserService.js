@@ -72,7 +72,7 @@ class UserService{
     #handleServiceError(kwargs, error){
         console.error( `Error in ${kwargs[0]}:`, error);
         if(error instanceof NotFoundError){
-            throw new NotFoundError(`User with ${kwargs[1]} not found`);
+            throw new NotFoundError(`User with ID ${kwargs[1]} not found`);
         }
 
         if(error instanceof ValidationError){

@@ -12,7 +12,9 @@ class SecretRoutes{
 
     initializeRoutes(){
         this.router.post('/', validateFields("createSecret"), asyncHandler(this.sController.createSecreet.bind(this.sController)));
-
+        this.router.get('/:id', asyncHandler(this.sController.selectSecret.bind(this.sController)));
+        this.router.patch('/:id', asyncHandler(this.sController.updateSecret.bind(this.sController)));
+        this.router.delete('/:id', asyncHandler(this.sController.deleteSecret.bind(this.sController)));
     }
 
 

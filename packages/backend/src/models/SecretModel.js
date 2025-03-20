@@ -21,14 +21,14 @@ function initializeSecret(sequelize){
             },
 
             userId:{
-                type:DataTypes.INTEGER,
+                type: DataTypes.INTEGER,
                 allowNull: false,
                 references:{
                     model: "users",
-                    key: "id",
+                    key: 'id',
                 },
-                onDelete: "CASCADE",
-                onUpdate: "CASCADE",
+                onUpdate: 'CASCADE', 
+                onDelete: 'CASCADE',
             },
 
             content:{
@@ -48,7 +48,9 @@ function initializeSecret(sequelize){
             tableName: "secrets",
             timestamps: false
         }
-    )
+    );
+
+    return Secret;
 }
 
 export { Secret, initializeSecret };

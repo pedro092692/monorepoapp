@@ -1,5 +1,6 @@
 import { Secret } from "../models/SecretModel.js";
 import UserService from "./UserService.js";
+import { NotFoundError } from "../errors/error.js";
 
 class SecretService{
 
@@ -17,12 +18,42 @@ class SecretService{
             return newSecret;
         })
     }
+
+    readSecret(secretId){
+        return this.#wrapperServiceCall(['Select Secret', secretId], async () =>{
+            const secret = await Secret.findByPk(secretId, {include: { association: "user",
+                attributes: ["id", "email"],
+            }});
+            if(!secret){
+                throw new NotFoundError();
+            }
+            return secret;
+        })
+    }
+
+    updateSecret(secretId, updates){
+        return this.#wrapperServiceCall(['Update Secret', secretId], async () => {
+            const { content } = updates;
+            const secret = await this.readSecret(secretId);
+            const updatedSecret = await secret.update({content});
+            return updatedSecret;
+        })
+    }
+
+    deleteSecret(secretId){
+        return this.#wrapperServiceCall(['Delete Secret', secretId], async () => {
+            const secret = await this.readSecret(secretId);
+            // delete secret 
+            await secret.destroy();
+            return 1;
+        })
+    }
     
 
     
     async #wrapperServiceCall(kwargs, fn){
         try{
-            return fn();
+            return await fn();
         }catch(error){
             this.#handleServiceError(kwargs, error);
         }
@@ -30,6 +61,10 @@ class SecretService{
 
     #handleServiceError(kwargs, error){
         console.error(`Error in ${kwargs[0]}, ${error}`);
+        if(error instanceof NotFoundError){
+            throw new NotFoundError(`Secret with ID ${kwargs[1]} not found`);
+        }
+
         throw new Error(`Faile ${kwargs[0]}, Error: ${error.message}`);
     }
 }
