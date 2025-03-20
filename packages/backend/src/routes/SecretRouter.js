@@ -15,6 +15,7 @@ class SecretRoutes{
         this.router.get('/:id', asyncHandler(this.sController.selectSecret.bind(this.sController)));
         this.router.patch('/:id', asyncHandler(this.sController.updateSecret.bind(this.sController)));
         this.router.delete('/:id', asyncHandler(this.sController.deleteSecret.bind(this.sController)));
+        this.router.get('/', asyncHandler(this.sController.allSecrets.bind(this.sController)));
     }
 
 

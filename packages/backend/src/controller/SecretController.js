@@ -32,6 +32,11 @@ class SecretController{
         res.status(200).json({message: "Secret has been deleted"});
     })
 
+    allSecrets = this.#wrapControllerCall( async (req, res) => {
+        const secrets = await this.secrets.secrets();
+        res.status(200).json(secrets);
+    })
+
 
     #handleControllerError(error, res){
         if (error instanceof NotFoundError){

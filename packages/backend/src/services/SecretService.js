@@ -48,6 +48,22 @@ class SecretService{
             return 1;
         })
     }
+
+    secrets(limit=10, offset=0){
+        return this.#wrapperServiceCall(['All secrets'], async () => {
+            const allSecrets = await Secret.findAll({
+                attributes: ['id', 'userId', 'content'],
+                order:[['id', 'ASC']],
+                include:{
+                    association: "user",
+                    attributes: ["email"]
+                },
+                limit: limit,
+                offset: offset
+            });
+            return allSecrets;
+        })
+    }
     
 
     
