@@ -1,0 +1,8 @@
+// .sequelizerc
+const path = require('path');
+
+module.exports = {
+  'models-path': path.resolve('./src/models'), // Path to your existing models directory
+  'migrations-path': path.resolve('./migrations'),
+  'seeders-path': path.resolve('./seeders'),
+};

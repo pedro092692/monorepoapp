@@ -10,12 +10,13 @@ class SecretService{
         this.error = new ServiceErrorHandler();
     }
 
-    createSecret(userId, content){
+    createSecret(userId, content, title){
         return this.error.handler(['Create Secret'], async () => {
             const user = await this.users.readUser(userId);
             const newSecret = await Secret.create({
                 userId: user.id, 
                 content: content,
+                title: title,
             })
             return newSecret;
         })
@@ -54,7 +55,7 @@ class SecretService{
     secrets(limit=10, offset=0){
         return this.error.handler(['All secrets'], async () => {
             const allSecrets = await Secret.findAll({
-                attributes: ['id', 'userId', 'content'],
+                attributes: ['id', 'userId', 'content', 'title'],
                 order:[['id', 'ASC']],
                 include:{
                     association: "user",

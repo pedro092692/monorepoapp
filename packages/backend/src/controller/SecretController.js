@@ -10,8 +10,8 @@ class SecretController{
     }
 
     createSecreet = error.handler( async (req, res) => {
-        const {userId, content} = req.body;
-        const newUser = await this.secrets.createSecret(userId, content);
+        const {userId, content, title} = req.body;
+        const newUser = await this.secrets.createSecret(userId, content, title);
         res.status(201).json(newUser);
     });
 

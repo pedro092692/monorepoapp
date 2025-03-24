@@ -4,6 +4,7 @@ import { initializeUser, User } from "../models/UserModel.js";
 import { initializeSecret, Secret } from "../models/SecretModel.js";
 
 let instance = null;
+let synced = false;
 
 class DataBase{
     constructor(){
@@ -21,7 +22,7 @@ class DataBase{
 
         this.initializeModels();
         this.iniciateRelations();
-        this.syncModels(true);
+        this.syncModels(synced);
     }
 
     async testConnecction(){

@@ -40,6 +40,10 @@ function initializeSecret(sequelize){
                 type:DataTypes.DATE,
                 allowNull: false,
                 defaultValue: new Date(),
+            },
+            title:{
+                type:DataTypes.STRING,
+                allowNull: false, 
             }
         },
         {

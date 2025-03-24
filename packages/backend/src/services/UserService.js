@@ -54,7 +54,7 @@ class UserService{
                 ],
                 include:{
                     association: "secrets",
-                    attributes:['content']
+                    attributes:['content', 'title']
                 },
                 limit: limit,
                 offset: offset,
