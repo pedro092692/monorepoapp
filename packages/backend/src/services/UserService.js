@@ -1,5 +1,5 @@
 import { User } from "../models/UserModel.js";
-import ServiceErrorHandler from "../errors/serviceErrorHanlder.js";
+import ServiceErrorHandler from "../errors/serviceErrorHandler.js";
 import { NotFoundError } from "../errors/error.js";
 
 class UserService{
@@ -20,7 +20,6 @@ class UserService{
 
     readUser(userId){
         return this.error.handler(['Select User', userId, 'User'], async () => {
-            console.log(this.error);
             const user = await User.findByPk(userId, {include: {association: "secrets"}});
             if(!user){
                 throw new NotFoundError();

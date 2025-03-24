@@ -1,7 +1,7 @@
 import { Secret } from "../models/SecretModel.js";
 import UserService from "./UserService.js";
 import { NotFoundError } from "../errors/error.js";
-import ServiceErrorHandler from "../errors/serviceErrorHanlder.js";
+import ServiceErrorHandler from "../errors/serviceErrorHandler.js";
 
 class SecretService{
 
