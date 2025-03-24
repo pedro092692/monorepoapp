@@ -1,15 +1,17 @@
 import { Secret } from "../models/SecretModel.js";
 import UserService from "./UserService.js";
 import { NotFoundError } from "../errors/error.js";
+import ServiceErrorHandler from "../errors/serviceErrorHanlder.js";
 
 class SecretService{
 
     constructor(){
         this.users = new UserService();
+        this.error = new ServiceErrorHandler();
     }
 
     createSecret(userId, content){
-        return this.#wrapperServiceCall(['Create Secret'], async () => {
+        return this.error.handler(['Create Secret'], async () => {
             const user = await this.users.readUser(userId);
             const newSecret = await Secret.create({
                 userId: user.id, 
@@ -20,7 +22,7 @@ class SecretService{
     }
 
     readSecret(secretId){
-        return this.#wrapperServiceCall(['Select Secret', secretId], async () =>{
+        return this.error.handler(['Select Secret', secretId, 'Secret'], async () =>{
             const secret = await Secret.findByPk(secretId, {include: { association: "user",
                 attributes: ["id", "email"],
             }});
@@ -32,7 +34,7 @@ class SecretService{
     }
 
     updateSecret(secretId, updates){
-        return this.#wrapperServiceCall(['Update Secret', secretId], async () => {
+        return this.error.handler(['Update Secret', secretId, 'Secret'], async () => {
             const { content } = updates;
             const secret = await this.readSecret(secretId);
             const updatedSecret = await secret.update({content});
@@ -41,7 +43,7 @@ class SecretService{
     }
 
     deleteSecret(secretId){
-        return this.#wrapperServiceCall(['Delete Secret', secretId], async () => {
+        return this.error.handler(['Delete Secret', secretId, 'Secret'], async () => {
             const secret = await this.readSecret(secretId);
             // delete secret 
             await secret.destroy();
@@ -50,7 +52,7 @@ class SecretService{
     }
 
     secrets(limit=10, offset=0){
-        return this.#wrapperServiceCall(['All secrets'], async () => {
+        return this.error.handler(['All secrets'], async () => {
             const allSecrets = await Secret.findAll({
                 attributes: ['id', 'userId', 'content'],
                 order:[['id', 'ASC']],
@@ -65,24 +67,6 @@ class SecretService{
         })
     }
     
-
-    
-    async #wrapperServiceCall(kwargs, fn){
-        try{
-            return await fn();
-        }catch(error){
-            this.#handleServiceError(kwargs, error);
-        }
-    }
-
-    #handleServiceError(kwargs, error){
-        console.error(`Error in ${kwargs[0]}, ${error}`);
-        if(error instanceof NotFoundError){
-            throw new NotFoundError(`Secret with ID ${kwargs[1]} not found`);
-        }
-
-        throw new Error(`Faile ${kwargs[0]}, Error: ${error.message}`);
-    }
 }
 
 export default SecretService;

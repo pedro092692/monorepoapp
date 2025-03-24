@@ -44,6 +44,11 @@ function initializeUser(sequelize){
                         msg: "Password must be at least 6 characters",
                     }
                 }
+            },
+
+            role:{
+                type: DataTypes.ENUM("admin", "user"),
+                defaultValue: "user",
             }
         },
         {

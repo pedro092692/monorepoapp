@@ -1,12 +1,15 @@
 import { User } from "../models/UserModel.js";
-import { Association, ValidationError } from "sequelize";
+import ServiceErrorHandler from "../errors/serviceErrorHanlder.js";
 import { NotFoundError } from "../errors/error.js";
 
-
 class UserService{
+    constructor(){
+        this.error = new ServiceErrorHandler();
+    }
+
     
     createUser(email, password){
-        return this.#wrapServiceCall(['Create User'], async () => {
+        return this.error.handler(['Create User'], async () => {
             const newUser = await User.create({
                 email: email, 
                 password: password,
@@ -16,7 +19,8 @@ class UserService{
     }
 
     readUser(userId){
-        return this.#wrapServiceCall(['Select User', userId], async () =>{
+        return this.error.handler(['Select User', userId, 'User'], async () => {
+            console.log(this.error);
             const user = await User.findByPk(userId, {include: {association: "secrets"}});
             if(!user){
                 throw new NotFoundError();
@@ -26,7 +30,7 @@ class UserService{
     }
 
     updateUser(userId, updates){
-        return this.#wrapServiceCall(['Update user', userId], async () => {
+        return this.error.handler(['Update user', userId, 'User'], async () => {
             const user = await this.readUser(userId);
             const updatedUser = await user.update(updates);
             return updatedUser;
@@ -34,7 +38,7 @@ class UserService{
     }
 
     deleteUser(userId){
-        return this.#wrapServiceCall(['Delete User', userId], async () => {
+        return this.error.handler(['Delete User', userId, 'User'], async () => {
             const user = await this.readUser(userId);
             //delete user 
             await user.destroy();
@@ -43,7 +47,7 @@ class UserService{
     }
 
     users(limit=10, offset=0){
-        return this.#wrapServiceCall(['All users'], async () => {
+        return this.error.handler(['All users'], async () => {
             const users = await User.findAll({
                 attributes:['id', 'email'],
                 order: [
@@ -58,28 +62,6 @@ class UserService{
             });
             return users;
         })
-    }
-
-
-    async #wrapServiceCall(kwargs, fn){
-        try{
-            return await fn();
-        }catch(error){
-            this.#handleServiceError(kwargs, error);
-        }
-    }
-
-    #handleServiceError(kwargs, error){
-        console.error( `Error in ${kwargs[0]}:`, error);
-        if(error instanceof NotFoundError){
-            throw new NotFoundError(`User with ID ${kwargs[1]} not found`);
-        }
-
-        if(error instanceof ValidationError){
-            const errors = error.errors.map(err => err.message);
-            throw new Error(`Faile ${kwargs[0]} Errors: ${errors}`);
-        }
-        throw new Error(`Faile ${kwargs[0]}: ${error}`)
     }
 
 }
