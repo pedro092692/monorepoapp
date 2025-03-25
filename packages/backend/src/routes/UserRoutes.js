@@ -3,6 +3,7 @@ import asyncHandler from "express-async-handler";
 import UserController from "../controller/UserController.js";
 import { validateFields } from "../validators/fieldValidator.js";
 import authenticated from "../middlewares/authMiddleware.js";
+import { isAdmin } from "../middlewares/authMiddleware.js";
 
 class UserRoutes{
     constructor(){
@@ -12,10 +13,10 @@ class UserRoutes{
     }
 
     initializeRoutes(){
-        this.router.get('/', authenticated, asyncHandler(this.userController.allUsers.bind(this.userController)));
+        this.router.get('/', authenticated, isAdmin, asyncHandler(this.userController.allUsers.bind(this.userController)));
         this.router.post('/', asyncHandler(this.userController.createUser.bind(this.userController)));
         this.router.get('/:id', authenticated, asyncHandler(this.userController.selectUser.bind(this.userController)));
-        this.router.get('/profile', authenticated, asyncHandler(this.userController.selectUser.bind(this.userController)));
+        this.router.get('/profile/view', authenticated, asyncHandler(this.userController.userProfile.bind(this.userController)));
         this.router.patch('/:id', authenticated, validateFields('updateUser'), asyncHandler(this.userController.updateUser.bind(this.userController)));
         this.router.delete('/:id', authenticated, asyncHandler(this.userController.deleteUser.bind(this.userController)));
     }

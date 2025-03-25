@@ -20,6 +20,11 @@ class UserController{
         res.status(200).json(user);
     });
 
+    userProfile = error.handler( async (req, res) => {
+        const user = await this.users.readUser(req.user.id);
+        res.status(200).json(user);
+    })
+
     updateUser = error.handler( async (req, res) => {
         const { id } = req.params;
         const updates = req.body;

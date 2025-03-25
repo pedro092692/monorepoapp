@@ -25,7 +25,7 @@ class UserService{
 
     readUser(userId){
         return this.error.handler(['Select User', userId, 'User'], async () => {
-            const user = await User.findByPk(userId, {include: {association: "secrets"}});
+            const user = await User.findByPk(userId, {include: {association: "secrets"}, attributes: ['id', 'email', 'role']});
             if(!user){
                 throw new NotFoundError();
             }

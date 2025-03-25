@@ -13,14 +13,35 @@ class authMiddleware{
             try{
                 const decoded = jwt.verify(token, process.env.JWT_SECRET);
                 req.user = decoded;
-                console.log(req.user);
                 next();
             }catch(error){
                 res.status(401).json({ message: "Invalid or expired token" });
             }
         }
     }
+
+    isAdmin() {
+        return (req, res, next) => {
+            try {
+                if (!req.user) {
+                    return res.status(401).json({ message: "Unauthorized" });
+                }
+                
+                const role = req.user.role;
+                if (role === 'admin') {
+                    return next();
+                }
+                
+                res.status(403).json({ message: "Forbidden" });
+            } catch (error) {
+                console.error("Error in isAdmin middleware:", error);
+                res.status(500).json({ success: false, error: error.message });
+            }
+        };
+    }
 }
 
 const authenticated = new authMiddleware().authenticatedToken();
+const isAdmin = new authMiddleware().isAdmin();
 export default authenticated;
+export { isAdmin };

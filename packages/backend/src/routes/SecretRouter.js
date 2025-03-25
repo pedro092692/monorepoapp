@@ -14,6 +14,7 @@ class SecretRoutes{
     initializeRoutes(){
         this.router.post('/', authenticated, validateFields("createSecret"), asyncHandler(this.sController.createSecreet.bind(this.sController)));
         this.router.get('/:id', authenticated, asyncHandler(this.sController.selectSecret.bind(this.sController)));
+        this.router.get('/mysecrets/view', authenticated, asyncHandler(this.sController.userSecrets.bind(this.sController)));
         this.router.patch('/:id', authenticated, asyncHandler(this.sController.updateSecret.bind(this.sController)));
         this.router.delete('/:id', authenticated, asyncHandler(this.sController.deleteSecret.bind(this.sController)));
         this.router.get('/', authenticated, asyncHandler(this.sController.allSecrets.bind(this.sController)));

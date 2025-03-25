@@ -2,6 +2,7 @@ import { Secret } from "../models/SecretModel.js";
 import UserService from "./UserService.js";
 import { NotFoundError } from "../errors/error.js";
 import ServiceErrorHandler from "../errors/serviceErrorHandler.js";
+import { where } from "sequelize";
 
 class SecretService{
 
@@ -24,9 +25,15 @@ class SecretService{
 
     readSecret(secretId){
         return this.error.handler(['Select Secret', secretId, 'Secret'], async () =>{
-            const secret = await Secret.findByPk(secretId, {include: { association: "user",
-                attributes: ["id", "email"],
-            }});
+            const secret = await Secret.findByPk(
+                secretId, 
+                {
+                include:{ 
+                        association: "user",
+                        attributes: ["id", "email"],
+                    },
+                }
+            );
             if(!secret){
                 throw new NotFoundError();
             }
@@ -49,6 +56,19 @@ class SecretService{
             // delete secret 
             await secret.destroy();
             return 1;
+        })
+    }
+
+    userSecrets(userId, limit=10, offset=0){
+        return this.error.handler(['User Secrets'], async () => {
+            const secrets = await Secret.findAll({
+                attributes: ['id', 'userId', 'content', 'title'],
+                order:[['id', 'ASC']],
+                where:{
+                    userId: userId
+                }
+            });
+            return secrets;
         })
     }
 
