@@ -2,6 +2,7 @@ import express from "express";
 import LoginController from "../controller/LoginController.js";
 import asyncHandler from "express-async-handler";
 import { validateFields } from "../validators/fieldValidator.js";
+import authenticated from "../middlewares/authMiddleware.js";
 
 
 class SecurityRoutes{

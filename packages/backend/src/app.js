@@ -4,9 +4,12 @@ import DataBase from "./config/database.js";
 import UserRoutes from "./routes/UserRoutes.js";
 import SecretRoutes from "./routes/SecretRouter.js";
 import SecureRoutes from "./routes/Security.js";
+import env from "dotenv";
+
 
 class Server{
     constructor(){
+        env.config();
         this.app = express();
         this.port = 4000;
         this.db = new DataBase();
@@ -15,7 +18,6 @@ class Server{
         this.SecretRoutes = SecretRoutes;
         this.SecureRoutes = SecureRoutes;
         this.rotues();
-
     }
 
     middlewares(){
