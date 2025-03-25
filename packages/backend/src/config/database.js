@@ -43,7 +43,7 @@ class DataBase{
         }
     }
 
-    initializeModels(){
+    async initializeModels(){
         initializeUser(this.sequelize);
         initializeSecret(this.sequelize);
     }
@@ -60,9 +60,22 @@ class DataBase{
         try{
             await this.sequelize.sync({ alter: true });
             console.log('All tables synchronized successfully');
+            
+            // add admin user
+            const adminUser = await User.findByPk(1);
+            if(!adminUser){
+                await User.create({
+                    email: 'admin@admin.com',
+                    password: 'adminadmin',
+                    role: 'admin',
+                });
+                console.log('admin user has been created');
+            }
+
         }catch(error){
             console.error('Error synchronizing tables:', error);
         }
+
     }
 }
 
