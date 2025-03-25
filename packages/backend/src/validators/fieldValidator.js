@@ -14,6 +14,11 @@ function validateFields(rule){
             check("userId").notEmpty().withMessage("User Id is required"),
             check("content").notEmpty().withMessage("Content is required"),
             check("title").notEmpty().withMessage("Title is required"),
+        ],
+
+        login:[
+            check("email").notEmpty().isEmail().withMessage("A valid email is required"),
+            check("password").notEmpty().withMessage("Password is required"),
         ]
     }
 

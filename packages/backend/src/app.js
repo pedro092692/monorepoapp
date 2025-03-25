@@ -3,6 +3,7 @@ import asyncHandler from "express-async-handler";
 import DataBase from "./config/database.js";
 import UserRoutes from "./routes/UserRoutes.js";
 import SecretRoutes from "./routes/SecretRouter.js";
+import SecureRoutes from "./routes/Security.js";
 
 class Server{
     constructor(){
@@ -12,6 +13,7 @@ class Server{
         this.middlewares();
         this.UserRoutes = UserRoutes;
         this.SecretRoutes = SecretRoutes;
+        this.SecureRoutes = SecureRoutes;
         this.rotues();
 
     }
@@ -28,6 +30,8 @@ class Server{
         this.app.use('/users', this.UserRoutes);
         //secrets rotues
         this.app.use('/secrets', this.SecretRoutes);
+        //Secure routes
+        this.app.use(this.SecureRoutes);
         
     }
 

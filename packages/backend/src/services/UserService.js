@@ -1,26 +1,41 @@
 import { User } from "../models/UserModel.js";
 import ServiceErrorHandler from "../errors/serviceErrorHandler.js";
 import { NotFoundError } from "../errors/error.js";
+import bcrypt from "bcrypt";
 
 class UserService{
     constructor(){
         this.error = new ServiceErrorHandler();
+        this.saltRounds = 10;
     }
 
     
     createUser(email, password){
         return this.error.handler(['Create User'], async () => {
+            const hashedPassword = await bcrypt.hash(password, this.saltRounds);
             const newUser = await User.create({
                 email: email, 
-                password: password,
+                password: hashedPassword,
             });
-            return newUser;
+            const user = {...newUser.toJSON()};
+            delete user.password;
+            return user;
         });
     }
 
     readUser(userId){
         return this.error.handler(['Select User', userId, 'User'], async () => {
             const user = await User.findByPk(userId, {include: {association: "secrets"}});
+            if(!user){
+                throw new NotFoundError();
+            }
+            return user;
+        })
+    }
+
+    findUser(email){
+        return this.error.handler(['Find User', email, 'User'], async () => {
+            const user = await User.findOne({where:{ email: email}});
             if(!user){
                 throw new NotFoundError();
             }

@@ -2,6 +2,7 @@ import { Sequelize } from "sequelize";
 import path from "path";
 import { initializeUser, User } from "../models/UserModel.js";
 import { initializeSecret, Secret } from "../models/SecretModel.js";
+import bcrypt from "bcrypt";
 
 let instance = null;
 let synced = false;
@@ -58,7 +59,7 @@ class DataBase{
 
         // sync models
         try{
-            await this.sequelize.sync({ alter: true });
+            await this.sequelize.sync({ force: true });
             console.log('All tables synchronized successfully');
             
             // add admin user
@@ -66,7 +67,7 @@ class DataBase{
             if(!adminUser){
                 await User.create({
                     email: 'admin@admin.com',
-                    password: 'adminadmin',
+                    password: await bcrypt.hash('adminadmin', 10),
                     role: 'admin',
                 });
                 console.log('admin user has been created');
