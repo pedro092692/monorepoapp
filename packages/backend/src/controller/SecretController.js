@@ -19,7 +19,7 @@ class SecretController{
         const { id } = req.params;
         const secret = await this.secrets.readSecret(id);
         if(req.user.role === 'user' && secret.userId != req.user.id){
-           return res.status(403).json({message: 'Forbidden'});
+            res.status(403).json({message: 'Forbidden'});
         }
         res.status(200).json(secret);
     });
@@ -32,7 +32,11 @@ class SecretController{
     updateSecret = error.handler( async (req, res) =>{
         const { id } = req.params;
         const updates = req.body;
-        const updatedSecret = await this.secrets.updateSecret(id, updates);
+        const secret = this.secrets.readSecret(id);
+        if(req.user.role === 'user' && secret.userId != req.user.id){
+            res.status(403).json({message: 'Forbidden'});
+        }
+        const updatedSecret = await this.secrets.updateSecret(secret.id, updates);
         res.status(200).json(updatedSecret);
     });
 

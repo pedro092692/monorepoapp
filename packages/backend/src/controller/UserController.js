@@ -26,14 +26,20 @@ class UserController{
     })
 
     updateUser = error.handler( async (req, res) => {
-        const { id } = req.params;
+        let id = req.user.id;
+        if(req.user.role === 'admin'){
+            id = req.body.id;
+        }
         const updates = req.body;
         const updateUser = await this.users.updateUser(id, updates);
         res.status(200).json(updateUser);
     });
 
     deleteUser = error.handler( async (req, res) => {
-        const { id } = req.params;
+        let id = req.user.id;
+        if(req.user.role === 'admin'){
+            id = req.body.id;
+        }
         const result = await this.users.deleteUser(id);
         res.status(200).json({message: "User has been deleted"});
     });

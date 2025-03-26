@@ -3,6 +3,7 @@ import SecretController from "../controller/SecretController.js";
 import asyncHandler from "express-async-handler";
 import { validateFields } from "../validators/fieldValidator.js";
 import authenticated from "../middlewares/authMiddleware.js";
+import { isAdmin } from "../middlewares/authMiddleware.js";
 
 class SecretRoutes{
     constructor(){
@@ -22,7 +23,7 @@ class SecretRoutes{
         this.router.get('/mysecrets/view', asyncHandler(this.sController.userSecrets.bind(this.sController)));
         this.router.patch('/:id', asyncHandler(this.sController.updateSecret.bind(this.sController)));
         this.router.delete('/:id', asyncHandler(this.sController.deleteSecret.bind(this.sController)));
-        this.router.get('/', asyncHandler(this.sController.allSecrets.bind(this.sController)));
+        this.router.get('/', isAdmin, asyncHandler(this.sController.allSecrets.bind(this.sController)));
     }
 
 
