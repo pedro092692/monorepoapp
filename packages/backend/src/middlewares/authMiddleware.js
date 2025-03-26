@@ -7,7 +7,7 @@ class authMiddleware{
             const authHeader = req.headers["authorization"];
             const token = authHeader && authHeader.split(" ")[1];
             if(!token){
-                res.status(403).json({ message: "Access denied" });
+                return res.status(403).json({ message: "Access denied" });
             }
             //very token 
             try{
@@ -15,7 +15,7 @@ class authMiddleware{
                 req.user = decoded;
                 next();
             }catch(error){
-                res.status(401).json({ message: "Invalid or expired token" });
+                return res.status(401).json({ message: "Invalid or expired token" });
             }
         }
     }

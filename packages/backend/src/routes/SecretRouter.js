@@ -8,16 +8,21 @@ class SecretRoutes{
     constructor(){
         this.router = express.Router();
         this.sController = new SecretController();
+        this.startMiddleware();
         this.initializeRoutes();
     }
 
+    startMiddleware(){
+        this.router.use(authenticated);
+    }
+
     initializeRoutes(){
-        this.router.post('/', authenticated, validateFields("createSecret"), asyncHandler(this.sController.createSecreet.bind(this.sController)));
-        this.router.get('/:id', authenticated, asyncHandler(this.sController.selectSecret.bind(this.sController)));
-        this.router.get('/mysecrets/view', authenticated, asyncHandler(this.sController.userSecrets.bind(this.sController)));
-        this.router.patch('/:id', authenticated, asyncHandler(this.sController.updateSecret.bind(this.sController)));
-        this.router.delete('/:id', authenticated, asyncHandler(this.sController.deleteSecret.bind(this.sController)));
-        this.router.get('/', authenticated, asyncHandler(this.sController.allSecrets.bind(this.sController)));
+        this.router.post('/', validateFields("createSecret"), asyncHandler(this.sController.createSecreet.bind(this.sController)));
+        this.router.get('/:id', asyncHandler(this.sController.selectSecret.bind(this.sController)));
+        this.router.get('/mysecrets/view', asyncHandler(this.sController.userSecrets.bind(this.sController)));
+        this.router.patch('/:id', asyncHandler(this.sController.updateSecret.bind(this.sController)));
+        this.router.delete('/:id', asyncHandler(this.sController.deleteSecret.bind(this.sController)));
+        this.router.get('/', asyncHandler(this.sController.allSecrets.bind(this.sController)));
     }
 
 
