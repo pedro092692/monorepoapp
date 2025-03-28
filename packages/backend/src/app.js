@@ -4,7 +4,11 @@ import DataBase from "./config/database.js";
 import UserRoutes from "./routes/UserRoutes.js";
 import SecretRoutes from "./routes/SecretRouter.js";
 import SecureRoutes from "./routes/Security.js";
+import cookieParser from "cookie-parser";
+import cors from "cors";
 import env from "dotenv";
+import fs from "fs";
+import https from "https";
 
 
 class Server{
@@ -18,11 +22,20 @@ class Server{
         this.SecretRoutes = SecretRoutes;
         this.SecureRoutes = SecureRoutes;
         this.rotues();
+        this.options = {
+            key: fs.readFileSync('../backend/localhost+1-key.pem'),
+            cert: fs.readFileSync('../backend/localhost+1.pem'),
+        }
     }
 
     middlewares(){
         this.app.use(express.json());
         this.app.use(express.urlencoded({extended: true}));
+        this.app.use(cors({
+            origin: 'https://127.0.0.1:3000', 
+            credentials: true,               
+        }));
+        this.app.use(cookieParser());
     }
 
     rotues(){
@@ -46,9 +59,9 @@ class Server{
 
 
     start(){
-        this.app.listen(this.port, () => {
-            console.log(`The server is listen on port: ${this.port}`);
-        })
+        https.createServer(this.options, this.app).listen(this.port, () => {
+            console.log(`Server running at https://127.0.0.1:${this.port}`);
+        });
     }
 
 }

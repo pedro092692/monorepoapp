@@ -18,8 +18,17 @@ class LoginController{
                 res.status(401).json({message: 'Invalid Email or password'});
             }
             const token = jwt.sign({id: user.id, email: user.email, role: user.role}, process.env.JWT_SECRET, {expiresIn: "1h"});
-            res.status(200).json({token});
-
+            //send HTTP-only cookie
+            res.cookie('token', token, {
+                httpOnly: true,
+                secure: true, 
+                sameSite: 'None',
+                path: '/',
+                maxAge: 3600000,
+            });
+            console.log(token);
+            console.log(res.getHeaders()); // Log headers
+            res.status(200).json({ message: 'Login successful' })
         }catch(error){
             res.status(401).json({message: 'Invalid Email or password'});
         }

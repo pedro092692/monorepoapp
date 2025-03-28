@@ -4,12 +4,13 @@ class authMiddleware{
 
     authenticatedToken(){
         return (req, res, next) => {
-            const authHeader = req.headers["authorization"];
-            const token = authHeader && authHeader.split(" ")[1];
+            console.log('Request Cookies:', req.headers);
+            console.log(req.cookies);
+            const token = req.cookies.token;
             if(!token){
                 return res.status(403).json({ message: "Access denied" });
             }
-            //very token 
+            //verify token 
             try{
                 const decoded = jwt.verify(token, process.env.JWT_SECRET);
                 req.user = decoded;

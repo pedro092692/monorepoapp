@@ -2,7 +2,6 @@ import express from "express";
 import LoginController from "../controller/LoginController.js";
 import asyncHandler from "express-async-handler";
 import { validateFields } from "../validators/fieldValidator.js";
-import authenticated from "../middlewares/authMiddleware.js";
 
 
 class SecurityRoutes{
@@ -14,7 +13,7 @@ class SecurityRoutes{
 
     initializeRoutes(){
         this.rotuer.get('/test', async (req, res) => {res.status(200).json({message: 'all is ok'})});
-        this.rotuer.post('/login', validateFields('login'), asyncHandler(this.securityController.loginUser.bind(this.securityController)));
+        this.rotuer.post('/api/login', validateFields('login'), asyncHandler(this.securityController.loginUser.bind(this.securityController)));
     }
 }
 

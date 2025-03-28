@@ -21,7 +21,7 @@ class ControllerErrorHandler{
         if ( error instanceof ValidationError || error instanceof ValidationErrorItem){
             return res.status(409).json({error: error.message});
         }
-        res.status(500).json({error: error.message});
+        return res.status(500).json({error: error.message});
     }
 
 }
